@@ -1,0 +1,17 @@
+.card-text{
+  color: green;
+  font-weight:800;
+
+}
+.card-title{
+  font-weight:900;
+}
+
+
+
+.card  {
+    display: block;
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: justify;
+}

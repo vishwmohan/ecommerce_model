@@ -1,0 +1,127 @@
+    {% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="{% static 'app/index1.css' %}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+
+  </head>
+  <body>
+
+
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Amazon</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                  </div>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+              </ul>
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" name="item_name" value="" placeholder="Search for products" type="search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </div>
+          </nav>
+
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+
+
+        </div>
+
+      </div>
+      <br>
+        <div class="row">
+          {% for product in product_objects %}
+            <div class="col-md-3 col-sm-6">
+                <div class="product-grid2">
+                    <div class="product-image2">
+                        <a href="#">
+                            <img class="pic-1" src="{{product.image}}" width="720" height="720">
+                            <img class="pic-2" src="{{product.image}}" width="720" height="720">
+                        </a>
+                        <ul class="social">
+                            <li><a href="{{product.id}}" data-tip="Quick View"><i class="fa fa-eye"></i></a></li>
+                            <li><a href="#" data-tip="Add to Cart"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                        <a class="add-to-cart" href="">Add to cart</a>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="title"><a href="#">{{product.title}}</a></h3>
+                        <span class="price">${{product.price}}</span>
+                    </div>
+
+                </div>
+            </div>
+      {%  endfor %}
+        </div>
+        <div class="row">
+          <div class="col-md-3 offset-md-4">
+            <ul class="pagination">
+              {% if product_objects.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{product_objects.previous_page_number}}">Previous</a>
+              </li>
+              {% endif %}
+              <br>
+              <li class="page-item active">
+                <a class="page-link" href="?page={{product_objects.number}}">Current</a>
+              </li>
+              <br>
+              {% if product_objects.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{product_objects.next_page_number}}">Next</a>
+              </li>
+              {% endif %}
+
+            </ul>
+
+
+          </div>
+
+        </div>
+
+
+
+    </div>
+
+  </body>
+</html>

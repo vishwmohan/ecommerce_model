@@ -1,0 +1,114 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script
+  src="http://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="{% static 'app/style.css' %}">
+    <title></title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <form class="card card-sm">
+            <div class="card-body row no-gutters align-items-center">
+              <div class="col">
+                <input type="search" name="item_name" value="" placeholder="Search for products" class="form-control form-control-borderless">
+
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-success "type="submit" > Search</button>
+
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+      <div class="row">
+        {% for product in product_objects %}
+        <div class="col-md-3">
+          <div class="card">
+              <img src="{{product.image}}" class="card-img-top">
+              <div class="card-body">
+                  <div class="card-title">
+                    {{product.title}}
+                      <div class="card-text">
+                    $  {{product.price}}
+
+                      </div>
+
+                      <a href="/{{product.id}}" class="btn btn-warning" type="button"> View</a>
+                      <button id="{{product.id}}" class="btn atc btn-warning" type="button"> Add to cart</button>
+                  </div>
+
+              </div>
+
+          </div>
+
+        </div>
+            {%  endfor %}
+      </div>
+<div class="row">
+  <div class="col-md-3 offset-md-4">
+    <ul class="pagination">
+      {% if product_objects.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{product_objects.previous_page_number}}">Previous</a>
+      </li>
+      {% endif %}
+      <br>
+      <li class="page-item active">
+        <a class="page-link" href="?page={{product_objects.number}}">Current</a>
+      </li>
+      <br>
+      {% if product_objects.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{product_objects.next_page_number}}">Next</a>
+      </li>
+      {% endif %}
+
+    </ul>
+
+
+  </div>
+
+</div>
+
+    </div>
+
+  </body>
+
+  <script type="text/javascript">
+  console.log("this is working");
+
+  if(localStorage.getItem('cart')==null){
+      var cart = {};
+  }
+  else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+  }
+  $(document).on('click','.atc',function(){
+    console.log("add to cart is clicked")
+    var item_id = this.id.toString();
+    console.log(item_id);
+    if (cart[item_id]!= undefined){
+        cart[item_id] += 1;
+    }
+    else{
+      cart[item_id] = 1;
+    }
+
+    console.log(cart);
+    localStorage.setItem('cart',JSON.stringify(cart));
+  })
+  </script>
+</html>

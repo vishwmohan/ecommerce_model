@@ -8,4 +8,7 @@ class Products(models.Model):
     discount_price = models.FloatField()
     category = models.CharField(max_length=200)
     description = models.TextField()
-    image = models.ImageField()
+    image = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.title
