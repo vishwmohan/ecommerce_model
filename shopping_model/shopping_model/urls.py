@@ -16,8 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app import views
+from django.contrib import admin
+from django.urls import path,include
+from users import views as user_views
+from users.forms import CustomAuthForm
+from django.contrib.auth import views as authentication_view
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index,name='index'),
     path('<int:id>', views.detail,name='detail'),
+    path('register/',user_views.register,name='register'),
+    # path('login/',user_views.login,name='login'),
+    path('login/',authentication_view.LoginView.as_view(template_name='users/login.html', authentication_form=CustomAuthForm ),name='login'),
+    path('logout/',authentication_view.LogoutView.as_view(template_name='users/logout.html'),name='logout'),
 ]
