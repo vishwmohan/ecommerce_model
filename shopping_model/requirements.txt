@@ -1,5 +1,5 @@
 
-Django==2.2
+Django==2.2.10
 django-meta==1.5.2
 djangorestframework==3.11.0
 docker==4.1.0
