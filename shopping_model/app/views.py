@@ -1,8 +1,16 @@
 from django.shortcuts import render
-from . models import Products
+from . models import Products,OrderProducts,Order
 from django.db.models import Q,CharField,TextField
 from django.db.models.functions import Lower
+from django.views.generic import View
 from django.core.paginator import Paginator
+from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+import pdb
+from django.contrib import messages
 # Create your views here.
 
 def index(request):
@@ -45,4 +53,135 @@ def index(request):
 def detail(request,id):
     product_object = Products.objects.get(id=id)
 
-    return render(request,'app/detail.html',{'product_object':product_object})
+    return render(request,'app/detail1.html',{'product_object':product_object})
+
+def checkout(request):
+    # category_object = Products.objects.filter(category=cat)
+    return render(request,'app/checkout.html')
+
+class OrderSummaryView(View):
+    # pdb.set_trace()
+    def get(self,*args,**kwargs):
+        order = Order.objects.get(user=self.request.user,ordered= False)
+        # product_object = Products.objects.get(id=id)
+
+        return render(self.request,'app/order_summary.html',{'order':order})
+
+
+
+
+
+@login_required
+def add_to_cart(request,id):
+    # pdb.set_trace()
+    product = get_object_or_404(Products,id=id)
+    print(product)
+    order_product,created = OrderProducts.objects.get_or_create(
+    product=product,
+    user = request.user,
+    ordered = False)
+    order_qs = Order.objects.filter(user=request.user,ordered=False)
+    print(order_qs)
+    if order_qs.exists():
+        order = order_qs[0]
+        #check if ordered product is in the order
+
+        if order.items.filter(product__id=product.id).exists():
+            print(order_product)
+            order_product.quantity += 1
+            order_product.save()
+            messages.info(request,"this item quantity was updated")
+            return redirect("OrderSummaryView")
+
+        else:
+            messages.info(request,"this item was added to your cart")
+            order.items.add(order_product)
+
+    else:
+        ordered_date = timezone.now()
+        order = Order.objects.create(user=request.user,odered_date=ordered_date)
+        order = order.items.add(order_product)
+
+        messages.info(request,"this item was added to your cart")
+    return redirect("index")
+
+@login_required
+def remove_cart(request,id):
+    # pdb.set_trace()
+    product = get_object_or_404(Products,id=id)
+    print(product)
+
+    order_qs = Order.objects.filter(user=request.user,ordered=False)
+    print(order_qs)
+    if order_qs.exists():
+        order = order_qs[0]
+        print(order)
+        #check if ordered product is in the order
+        if order.items.filter(product__id=product.id).exists():
+            order_product = OrderProducts.objects.filter(
+            product=product,
+            user = request.user,
+            ordered = False)[0]
+
+            order.items.remove(order_product)
+            messages.info(request,"this item was removed from your cart")
+            return redirect("OrderSummaryView")
+        else:
+            # add a message that order dosen't contain the product
+            order_product = OrderProducts.objects.filter(
+            product=product,
+            user = request.user,
+            ordered = False)[0]
+            print(order_product)
+            order.items.remove(order_product)
+            messages.info(request,"this item was not in your cart")
+
+            return redirect("index")
+    else:
+        # add a message that user dosen't hsve a order
+        messages.info(request,"you do not have an active order")
+        return redirect("index")
+    return redirect("index")
+
+@login_required
+def remove_single_item_from_cart(request,id):
+    # pdb.set_trace()
+    product = get_object_or_404(Products,id=id)
+    print(product)
+
+    order_qs = Order.objects.filter(user=request.user,ordered=False)
+    print(order_qs)
+    if order_qs.exists():
+        order = order_qs[0]
+        print(order)
+        #check if ordered product is in the order
+        if order.items.filter(product__id=product.id).exists():
+            order_product = OrderProducts.objects.filter(
+            product=product,
+            user = request.user,
+            ordered = False)[0]
+            if order_product.quantity > 1:
+                order_product.quantity -= 1
+            else:
+                order.items.remove(order_product)
+
+            order_product.save()
+            messages.info(request,"this item quantity was updated")
+            return redirect("OrderSummaryView")
+
+        else:
+            # add a message that order dosen't contain the product
+            order_product = OrderProducts.objects.filter(
+            product=product,
+            user = request.user,
+            ordered = False)[0]
+            print(order_product)
+            # order.items.remove(order_product)
+            messages.info(request,"this item was not in your cart")
+
+            return redirect("index")
+    else:
+        # add a message that user dosen't hsve a order
+        messages.info(request,"you do not have an active order")
+        return redirect("index")
+    return redirect("index")

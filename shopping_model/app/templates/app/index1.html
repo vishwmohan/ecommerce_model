@@ -1,4 +1,5 @@
     {% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -6,50 +7,55 @@
     <title></title>
     <link rel="stylesheet" href="{% static 'app/index1.css' %}">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
 <!------ Include the above in your HEAD tag ---------->
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /> -->
 
 
   </head>
   <body>
 
 
-
-
+  {% include 'app/navbar.html' %}
     <div class="container">
       <div class="row">
         <div class="col-md-12">
           <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Amazon</a>
+            <a class="navbar-brand" href="#">Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <!-- <li class="nav-item active">
                   <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
-                </li>
+                </li> -->
+
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
+
+                  <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Category
                   </a>
+
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href=""></a>
+
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something else here</a>
                   </div>
-                </li>
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/checkout/">Checkout</a>
+                  </li>
+                <!-- </li>
                 <li class="nav-item">
                   <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
+                </li> -->
               </ul>
               <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" name="item_name" value="" placeholder="Search for products" type="search" aria-label="Search">
@@ -80,12 +86,12 @@
                         </a>
                         <ul class="social">
                             <li><a href="{{product.id}}" data-tip="Quick View"><i class="fa fa-eye"></i></a></li>
-                            <li><a href="#" data-tip="Add to Cart"><i class="fa fa-shopping-cart"></i></a></li>
+                            <li><a href="{% url 'add-to-cart' product.id %}" data-tip="Add to Cart"><i class="fa atc fa-shopping-cart"></i></a></li>
                         </ul>
-                        <a class="add-to-cart" href="">Add to cart</a>
+                        <a class="add-to-cart" href="add-to-cart/{{product.id}}">Add to cart</a>
                     </div>
                     <div class="product-content">
-                        <h3 class="title"><a href="#">{{product.title}}</a></h3>
+                        <h3 class="title"><a href="{% url 'detail' product.id %}">{{product.title}}</a></h3>
                         <span class="price">${{product.price}}</span>
                     </div>
 
@@ -124,4 +130,28 @@
     </div>
 
   </body>
+  <!-- <script type="text/javascript">
+  console.log("this is working");
+
+  if(localStorage.getItem('cart')==null){
+      var cart = {};
+  }
+  else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+  }
+  $(document).on('click','.atc',function(){
+    console.log("add to cart is clicked")
+    var item_id = this.id.toString();
+    console.log(item_id);
+    if (cart[item_id]!= undefined){
+        cart[item_id] += 1;
+    }
+    else{
+      cart[item_id] = 1;
+    }
+
+    console.log(cart);
+    localStorage.setItem('cart',JSON.stringify(cart));
+  })
+  </script> -->
 </html>

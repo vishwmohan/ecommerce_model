@@ -1,0 +1,50 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<div class="login-page">
+  <div class="form">
+    <form class="login-form" method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      <!-- {{field.name}} -->
+      {{field}}
+      {% endfor %}
+      <button type="submit"> login</button>
+      <p class="message">Not registered? <a href="{% url 'register' %}">Create an account</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card">
+          <div class="card-header text-white bg-info">
+              <div class="card-title">
+                Login
+              </div>
+          </div>
+            <div class="card-body">
+
+              <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                  <div class="form-group">
+                    {{field.name}}
+                    {{field}}
+
+                  </div>
+                {% endfor %}
+                <button class= btn-info type="submit">Login</button>
+              </form>
+
+
+            </div>
+        </div>
+
+    </div>
+
+  </div>
+
+</div> -->
+{% endblock %}

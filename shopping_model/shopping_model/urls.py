@@ -23,12 +23,23 @@ from users.forms import CustomAuthForm
 from django.contrib.auth import views as authentication_view
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic.base import RedirectView
+
+favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index,name='index'),
-    path('<int:id>', views.detail,name='detail'),
+    path(r'favicon\.ico', favicon_view),
+    path('<int:id>/', views.detail,name='detail'),
+    path('add-to-cart/<int:id>/', views.add_to_cart,name='add-to-cart'),
+    path('order-summary/', views.OrderSummaryView.as_view(),name='OrderSummaryView'),
+    path('remove-from-cart/<int:id>/', views.remove_cart,name='remove-from-cart'),
+    path('checkout/', views.checkout,name='checkout'),
+    path('remove-single-item-from-cart/<int:id>/', views.remove_single_item_from_cart,name='remove_single_item_from_cart'),
+
     path('register/',user_views.register,name='register'),
-    # path('login/',user_views.login,name='login'),
+
     path('login/',authentication_view.LoginView.as_view(template_name='users/login.html', authentication_form=CustomAuthForm ),name='login'),
     path('logout/',authentication_view.LogoutView.as_view(template_name='users/logout.html'),name='logout'),
 ]
