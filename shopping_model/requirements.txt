@@ -34,7 +34,7 @@ mysql==0.0.2
 mysqlclient==1.4.6
 num2words==0.5.10
 pdfkit==0.6.1
-Pillow==7.0.0
+Pillow==9.0.0
 pycparser==2.19
 pymongo==3.10.1
 Pyphen==0.9.5
